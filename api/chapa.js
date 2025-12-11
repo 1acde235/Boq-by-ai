@@ -55,7 +55,7 @@ export default async function handler(req, res) {
         tx_ref: tx_ref || `TX-${Date.now()}`,
         return_url: returnUrl,
         customization: {
-          title: "ConstructAI Credits",
+          title: "ConstructAI", // Shortened to fit 16-char limit (Was "ConstructAI Credits")
           description: `Payment for ${creditsToAdd} Credits`
         }
       });
