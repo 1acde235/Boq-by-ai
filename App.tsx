@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { FileUpload } from './components/FileUpload';
 import { AnalysisView } from './components/AnalysisView';
@@ -493,7 +492,10 @@ const App: React.FC = () => {
 
       {showPaymentModal && (
         <PaymentModal 
-          onClose={() => setShowPaymentModal(false)}
+          onClose={() => {
+            setShowPaymentModal(false);
+            setInitialRedeemCode(''); // Clean state so it doesn't get stuck
+          }}
           onSuccess={handlePaymentSuccess}
           onRedeem={handleRedeemCode}
           initialCode={initialRedeemCode}

@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { X, CreditCard, ShieldCheck, Smartphone, Loader2, Landmark, Copy, Check, Ticket, ArrowRight, Globe } from 'lucide-react';
+import { X, CreditCard, ShieldCheck, Smartphone, Loader2, Landmark, Copy, Check, Ticket, ArrowRight, Globe, ArrowLeft } from 'lucide-react';
 
 interface PaymentModalProps {
   onClose: () => void;
@@ -225,31 +224,48 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ onClose, onSuccess, 
       }
   };
 
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden flex flex-col max-h-[95vh]">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={handleBackdropClick}
+    >
+      <div 
+        className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden flex flex-col max-h-[95vh]"
+        onClick={e => e.stopPropagation()}
+      >
         
         {/* Header */}
         <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-          <div>
-            <h3 className="text-lg font-bold text-slate-800">Top Up Wallet</h3>
-            <div className="flex items-center space-x-2 mt-1">
-                 <p className="text-xs text-slate-500">Secure Payment Gateway</p>
-                 <span className="text-slate-300">|</span>
-                 <div className="flex space-x-1">
-                     {(['USD', 'EUR', 'ETB'] as Currency[]).map(c => (
-                         <button 
-                            key={c}
-                            onClick={() => setCurrency(c)}
-                            className={`text-[10px] font-bold px-1.5 py-0.5 rounded transition-colors ${currency === c ? 'bg-slate-800 text-white' : 'bg-slate-200 text-slate-500 hover:bg-slate-300'}`}
-                         >
-                            {c}
-                         </button>
-                     ))}
-                 </div>
-            </div>
+          <div className="flex items-center">
+             <button onClick={onClose} className="mr-3 text-slate-400 hover:text-slate-600 transition-colors p-1.5 hover:bg-slate-200 rounded-full" title="Back">
+                <ArrowLeft className="w-5 h-5" />
+             </button>
+             <div>
+                <h3 className="text-lg font-bold text-slate-800">Top Up Wallet</h3>
+                <div className="flex items-center space-x-2 mt-1">
+                     <p className="text-xs text-slate-500">Secure Payment Gateway</p>
+                     <span className="text-slate-300">|</span>
+                     <div className="flex space-x-1">
+                         {(['USD', 'EUR', 'ETB'] as Currency[]).map(c => (
+                             <button 
+                                key={c}
+                                onClick={() => setCurrency(c)}
+                                className={`text-[10px] font-bold px-1.5 py-0.5 rounded transition-colors ${currency === c ? 'bg-slate-800 text-white' : 'bg-slate-200 text-slate-500 hover:bg-slate-300'}`}
+                             >
+                                {c}
+                             </button>
+                         ))}
+                     </div>
+                </div>
+             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors p-2 hover:bg-slate-100 rounded-full">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -407,6 +423,14 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ onClose, onSuccess, 
                </>
             )}
           </button>
+          
+          <button 
+            onClick={onClose}
+            className="w-full mt-3 py-2 text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            Cancel Payment
+          </button>
+
         </div>
 
         {/* REDEMPTION FOOTER */}
