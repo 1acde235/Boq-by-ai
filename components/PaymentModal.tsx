@@ -133,8 +133,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ onClose, onSuccess, 
                   if (response.ok && data.success && data.checkout_url) {
                       window.location.href = data.checkout_url;
                   } else {
-                      // Backend returned a specific error message
-                      throw new Error(data.error || data.message || "Payment initialization failed.");
+                      // Fix for [object Object] error:
+                      // Explicitly convert objects to strings if backend returns structured error
+                      let errorMsg = "Payment initialization failed.";
+                      if (data.error) {
+                          errorMsg = typeof data.error === 'string' ? data.error : JSON.stringify(data.error);
+                      } else if (data.message) {
+                          errorMsg = typeof data.message === 'string' ? data.message : JSON.stringify(data.message);
+                      }
+                      throw new Error(errorMsg);
                   }
               } else {
                   // Fallback for non-JSON response (likely HTML 500/404 error from Vercel)

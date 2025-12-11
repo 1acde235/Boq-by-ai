@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   const CHAPA_KEY = process.env.CHAPA_SECRET_KEY;
   if (!CHAPA_KEY) {
       console.error("[Chapa API] Error: CHAPA_SECRET_KEY is missing in Vercel Environment Variables.");
-      return res.status(500).json({ error: "Server Error: CHAPA_SECRET_KEY is not configured." });
+      return res.status(500).json({ error: "Server Error: CHAPA_SECRET_KEY is not configured in Vercel." });
   }
 
   if (req.method !== 'POST') {
@@ -110,10 +110,11 @@ export default async function handler(req, res) {
 
       if (response.statusCode !== 200 || result.status !== 'success') {
           console.error("[Chapa API] Gateway Error:", result);
+          // Ensure error is a string for frontend safely
+          const errorMsg = result.message || JSON.stringify(result) || "Payment initialization failed";
           return res.status(400).json({ 
               success: false, 
-              error: result.message || "Payment initialization failed",
-              details: result
+              error: errorMsg
           });
       }
 
